@@ -1,0 +1,13 @@
+@import './style/fonts.css';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'roboto-regular';
+  background-color: #2f2f2f;
+  color: #fff;;
+}
