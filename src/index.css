@@ -1,13 +1,45 @@
 @import './style/fonts.css';
 
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100vh;
+  font-family: 'roboto-regular', Arial, sans-serif;
+  background: linear-gradient(135deg, #e3f0ff 0%, #b3d8ff 100%);
+  color: #1a237e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'roboto-regular';
-  background-color: #2f2f2f;
-  color: #fff;;
+#root {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar for blue/white theme */
+::-webkit-scrollbar {
+  width: 8px;
+  background: #e3f0ff;
+}
+::-webkit-scrollbar-thumb {
+  background: #90caf9;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #1976d2;
 }
