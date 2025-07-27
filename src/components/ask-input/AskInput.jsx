@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import './ask-input.css';
 import { FaArrowUp } from 'react-icons/fa';
+const API_URL = import.meta.env.VITE_LLM_API;
 
 function renderBotMessage(content) {
     // Split into lines
@@ -47,7 +48,7 @@ function parseInline(text) {
         if (match.index > lastIdx) {
             parts.push(text.slice(lastIdx, match.index));
         }
-        parts.push(<strong key={'b'+idx}>{match[1]}</strong>);
+        parts.push(<strong key={'b' + idx}>{match[1]}</strong>);
         lastIdx = match.index + match[0].length;
         idx++;
     }
@@ -64,7 +65,7 @@ function parseInline(text) {
         let segIdx = 0;
         while ((m = linkRegex.exec(part)) !== null) {
             if (m.index > last) segments.push(part.slice(last, m.index));
-            segments.push(<a key={'a'+i+segIdx} href={m[1]} target="_blank" rel="noopener noreferrer">{m[1]}</a>);
+            segments.push(<a key={'a' + i + segIdx} href={m[1]} target="_blank" rel="noopener noreferrer">{m[1]}</a>);
             last = m.index + m[1].length;
             segIdx++;
         }
@@ -95,14 +96,21 @@ export default function AskInput() {
         setChat(prev => [...prev, { role: 'user', content: prompt }]);
         setUserPrompt('');
         setIsLoading(true);
-        fetch('http://localhost:5000/api/register', {
+        fetch(`${API_URL}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt })
         })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error('Network response was not ok');
+                return res.text();
+            })
+            .then(text => text ? JSON.parse(text) : {})
             .then(data => {
                 setChat(prev => [...prev, { role: 'bot', content: data.reply }]);
+            })
+            .catch(err => {
+                setChat(prev => [...prev, { role: 'bot', content: 'Error: ' + err.message }]);
             })
             .finally(() => setIsLoading(false));
     }
